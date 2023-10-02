@@ -31,3 +31,11 @@ export function signUpAction(payload) {
 		}
 	}
 }
+
+export function signOutAction() {
+	return async (dispatch, getState) => {
+		const { navigate } = getState().navigateReducer
+		localStorage.removeItem(ACCESS_TOKEN)
+		navigate('/sign-in')
+	}
+}
