@@ -1,25 +1,12 @@
-// import logo from './logo.svg';
-// import './RegisterAccout/RegisterAccout.css'
-// import RegisterPage from './RegisterAccout/RegisterAccout';
-// import LoginPage from './Login/Login';
-// import './Login/Login.css'
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import SignUp from './RegisterAccout/RegisterAccout';
-import SignIn from './Login/Login';
-
-
-
+import React from 'react'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 
 function App() {
-  return (
-    <Router>
-      <Switch>
-        <Route path="/sign-up" component={SignUp} />
-        <Route exact path="/" component={SignIn} />
-      </Switch>
-    </Router>
-  );
+	return (
+		<div id='App' className='w-full min-h-screen overflow-hidden'>
+			<Routes></Routes>
+		</div>
+	)
 }
 
-export default App;
+export default App
