@@ -5,21 +5,22 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import { signInAction } from '../redux/actions/authenAction'
 
 const SignIn = () => {
 	const dispatch = useDispatch()
 	const formik = useFormik({
 		initialValues: {
-			taiKhoan: '',
-			matKhau: '',
+			username: '',
+			password: '',
 		},
 		validationSchema: Yup.object({
-			taiKhoan: Yup.string().required('Account is required').min(5, 'Account must have min 5 characters'),
+			username: Yup.string().required('Account is required').min(5, 'Account must have min 5 characters'),
 
-			matKhau: Yup.string().required('Password is required').min(6, 'Password must have min 6 characters'),
+			password: Yup.string().required('Password is required').min(5, 'Password must have min 5 characters'),
 		}),
 		onSubmit: (values) => {
-			// dispatch(actionDangNhap(values))
+			dispatch(signInAction(values))
 		},
 	})
 
@@ -32,15 +33,15 @@ const SignIn = () => {
 						<AiOutlineUser />
 						<input
 							onChange={formik.handleChange}
-							value={formik.values.taiKhoan}
-							placeholder='account'
-							name='taiKhoan'
+							value={formik.values.username}
+							placeholder='Username'
+							name='username'
 							className='focus:outline-none w-full'
 							type='text'
 						/>
 					</div>
-					{formik.touched.taiKhoan && formik.errors.taiKhoan ? (
-						<span className='text-red-500'>{formik.errors.taiKhoan}</span>
+					{formik.touched.username && formik.errors.username ? (
+						<span className='text-red-500'>{formik.errors.username}</span>
 					) : null}
 				</div>
 				<div className='w-full'>
@@ -48,15 +49,15 @@ const SignIn = () => {
 						<AiFillLock />
 						<input
 							onChange={formik.handleChange}
-							value={formik.values.matKhau}
-							placeholder='password'
-							name='matKhau'
+							value={formik.values.password}
+							placeholder='Password'
+							name='password'
 							className='focus:outline-none w-full'
 							type='password'
 						/>
 					</div>
-					{formik.touched.matKhau && formik.errors.matKhau ? (
-						<span className='text-red-500'>{formik.errors.matKhau}</span>
+					{formik.touched.password && formik.errors.password ? (
+						<span className='text-red-500'>{formik.errors.password}</span>
 					) : null}
 				</div>
 				<p>
