@@ -10,7 +10,7 @@ export function signInAction(payload) {
 			if (status === 200) {
 				localStorage.setItem(ACCESS_TOKEN, data.data)
 				dispatch(getMyInfoAction())
-				navigate('/home')
+				navigate('/room/info')
 			}
 		} catch (error) {
 			alert(error.response?.data.message)
