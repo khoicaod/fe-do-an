@@ -11,7 +11,7 @@ import UserInfo from './pages/UserInfo'
 import UserManagement from './pages/UserManagement'
 import RoomInfo from './pages/RoomInfo'
 import RoomManagement from './pages/RoomManagement'
-import { ACCESS_TOKEN } from './utils/constant'
+import { ACCESS_TOKEN, ADMIN_ROLE } from './utils/constant'
 import HomeTemplate from './templates/HomeTemplate'
 import { getMyInfoAction } from './redux/actions/userAction'
 
@@ -42,13 +42,13 @@ function App() {
 					<Route element={<HomeTemplate />}>
 						<Route path='user'>
 							<Route element={<UserInfo />} path='info' />
-							<Route element={<ProtectedRoute condition={myInfo.role === 'ADMIN'} navigate='info' />}>
+							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='info' />}>
 								<Route element={<UserManagement />} path='management' />
 							</Route>
 						</Route>
 						<Route path='room'>
 							<Route element={<RoomInfo />} path='info' />
-							<Route element={<ProtectedRoute condition={myInfo.role === 'ADMIN'} navigate='info' />}>
+							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='info' />}>
 								<Route element={<RoomManagement />} path='management' />
 							</Route>
 						</Route>

@@ -7,6 +7,7 @@ import { BsDoorOpen } from 'react-icons/bs'
 import { GoSignOut } from 'react-icons/go'
 import { NavLink, Outlet } from 'react-router-dom'
 import { signOutAction } from '../redux/actions/authenAction'
+import { ADMIN_ROLE } from '../utils/constant'
 
 const HomeTemplate = () => {
 	const { myInfo } = useSelector((state) => state.userReducer)
@@ -51,7 +52,7 @@ const HomeTemplate = () => {
 					</NavLink>,
 					'user-1'
 				),
-				myInfo.role === 'ADMIN'
+				myInfo.role === ADMIN_ROLE
 					? getItem(
 							<NavLink to={'/user/management'}>
 								{({ isActive }) => (
@@ -87,7 +88,7 @@ const HomeTemplate = () => {
 					</NavLink>,
 					'room-1'
 				),
-				myInfo.role === 'ADMIN'
+				myInfo.role === ADMIN_ROLE
 					? getItem(
 							<NavLink to={'/room/management'}>
 								{({ isActive }) => (
