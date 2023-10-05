@@ -42,13 +42,13 @@ function App() {
 					<Route element={<HomeTemplate />}>
 						<Route path='user'>
 							<Route element={<UserInfo />} path='info' />
-							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='info' />}>
+							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='*' />}>
 								<Route element={<UserManagement />} path='management' />
 							</Route>
 						</Route>
 						<Route path='room'>
 							<Route element={<RoomInfo />} path='info' />
-							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='info' />}>
+							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='*' />}>
 								<Route element={<RoomManagement />} path='management' />
 							</Route>
 						</Route>
@@ -56,7 +56,8 @@ function App() {
 				</Route>
 
 				<Route path='' element={<Navigate to='/room/info' />} />
-				<Route path='*' element={<NotFound />} />
+				<Route path='*' element={<Navigate to='/not-found' />} />
+				<Route path='/not-found' element={<NotFound />} />
 			</Routes>
 		</div>
 	)
