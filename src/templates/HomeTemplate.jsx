@@ -50,7 +50,7 @@ const HomeTemplate = () => {
 							</span>
 						)}
 					</NavLink>,
-					'user-1'
+					'/user/info'
 				),
 				myInfo.role === ADMIN_ROLE
 					? getItem(
@@ -62,7 +62,7 @@ const HomeTemplate = () => {
 									</span>
 								)}
 							</NavLink>,
-							'user-2'
+							'/user/management'
 					  )
 					: null,
 			]
@@ -86,7 +86,7 @@ const HomeTemplate = () => {
 							</span>
 						)}
 					</NavLink>,
-					'room-1'
+					'/room/info'
 				),
 				myInfo.role === ADMIN_ROLE
 					? getItem(
@@ -98,7 +98,7 @@ const HomeTemplate = () => {
 									</span>
 								)}
 							</NavLink>,
-							'room-2'
+							'/room/management'
 					  )
 					: null,
 			]
@@ -116,7 +116,7 @@ const HomeTemplate = () => {
 					<div className='rounded-md pt-6'>
 						<Menu
 							className='w-full rounded-md'
-							defaultSelectedKeys={['room-1']}
+							selectedKeys={[window.location.pathname]}
 							defaultOpenKeys={['room']}
 							mode='inline'
 							items={items}
@@ -133,7 +133,7 @@ const HomeTemplate = () => {
 				</div>
 			</div>
 			<div className='w-10/12 fixed right-0 top-0 py-8 px-4'>
-				<div className='flex items-center justify-end'>
+				<div className='flex items-center justify-end pb-8'>
 					<div className='flex items-center gap-4 font-semibold'>
 						<h1>
 							Welcome Back, <span className='text-violet-500 underline'>{myInfo.fullName}</span>

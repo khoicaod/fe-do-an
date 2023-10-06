@@ -4,24 +4,21 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AuthenTemplate from './templates/AuthenTemplate'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { ASSIGN_NAVIGATE } from './redux/constants/navigateConstant'
 import NotFound from './pages/NotFound'
 import UserInfo from './pages/UserInfo'
 import UserManagement from './pages/UserManagement'
 import RoomInfo from './pages/RoomInfo'
 import RoomManagement from './pages/RoomManagement'
-import { ACCESS_TOKEN, ADMIN_ROLE } from './utils/constant'
+import { ACCESS_TOKEN, ADMIN_ROLE, ROLE } from './utils/constant'
 import HomeTemplate from './templates/HomeTemplate'
-import { getMyInfoAction } from './redux/actions/userAction'
 import { validateToken } from './redux/actions/authenAction'
 
 function App() {
 	const dispatch = useDispatch()
 
 	const navigate = useNavigate()
-
-	const { myInfo } = useSelector((state) => state.userReducer)
 
 	useEffect(() => {
 		dispatch({ type: ASSIGN_NAVIGATE, payload: navigate })
@@ -43,14 +40,26 @@ function App() {
 					<Route element={<HomeTemplate />}>
 						<Route path='user'>
 							<Route element={<UserInfo />} path='info' />
-							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='*' />}>
+							<Route
+								element={
+									<ProtectedRoute
+										condition={localStorage.getItem(ROLE) === ADMIN_ROLE}
+										navigate='*'
+									/>
+								}>
 								<Route element={<UserManagement />} path='management' />
 							</Route>
 							<Route path='' element={<Navigate to='info' />} />
 						</Route>
 						<Route path='room'>
 							<Route element={<RoomInfo />} path='info' />
-							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='*' />}>
+							<Route
+								element={
+									<ProtectedRoute
+										condition={localStorage.getItem(ROLE) === ADMIN_ROLE}
+										navigate='*'
+									/>
+								}>
 								<Route element={<RoomManagement />} path='management' />
 							</Route>
 							<Route path='' element={<Navigate to='info' />} />

@@ -1,4 +1,5 @@
 import userService from '../../services/userService'
+import { ROLE } from '../../utils/constant'
 import { GET_MY_INFO } from '../constants/userConstant'
 
 export function getMyInfoAction() {
@@ -6,6 +7,7 @@ export function getMyInfoAction() {
 		try {
 			const { status, data } = await userService.getMyInfo()
 			if (status === 200) {
+				localStorage.setItem(ROLE, data.data.role)
 				dispatch({ type: GET_MY_INFO, payload: data.data })
 			}
 		} catch (error) {

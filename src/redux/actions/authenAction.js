@@ -1,5 +1,5 @@
 import authenServices from '../../services/authenService'
-import { ACCESS_TOKEN } from '../../utils/constant'
+import { ACCESS_TOKEN, ROLE } from '../../utils/constant'
 import { getMyInfoAction } from './userAction'
 
 export function signInAction(payload) {
@@ -9,7 +9,7 @@ export function signInAction(payload) {
 			const { status, data } = await authenServices.signIn(payload)
 			if (status === 200) {
 				localStorage.setItem(ACCESS_TOKEN, data.data)
-				dispatch(getMyInfoAction())
+				await dispatch(getMyInfoAction())
 				navigate('/room/info')
 			}
 		} catch (error) {
@@ -36,6 +36,7 @@ export function signOutAction() {
 	return async (dispatch, getState) => {
 		const { navigate } = getState().navigateReducer
 		localStorage.removeItem(ACCESS_TOKEN)
+		localStorage.removeItem(ROLE)
 		navigate('/sign-in')
 	}
 }
@@ -43,10 +44,8 @@ export function signOutAction() {
 export function validateToken() {
 	return async (dispatch, getState) => {
 		try {
-			const { status, data } = await authenServices.validateToken(localStorage.getItem(ACCESS_TOKEN))
-			if (status === 200) {
-				dispatch(getMyInfoAction())
-			}
+			await authenServices.validateToken(localStorage.getItem(ACCESS_TOKEN))
+			dispatch(getMyInfoAction())
 		} catch (error) {
 			dispatch(signOutAction())
 		}
