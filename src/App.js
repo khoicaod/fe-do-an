@@ -14,6 +14,7 @@ import RoomManagement from './pages/RoomManagement'
 import { ACCESS_TOKEN, ADMIN_ROLE } from './utils/constant'
 import HomeTemplate from './templates/HomeTemplate'
 import { getMyInfoAction } from './redux/actions/userAction'
+import { validateToken } from './redux/actions/authenAction'
 
 function App() {
 	const dispatch = useDispatch()
@@ -26,7 +27,7 @@ function App() {
 		dispatch({ type: ASSIGN_NAVIGATE, payload: navigate })
 
 		if (localStorage.getItem(ACCESS_TOKEN)) {
-			dispatch(getMyInfoAction())
+			dispatch(validateToken())
 		}
 	}, [])
 
@@ -45,12 +46,14 @@ function App() {
 							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='*' />}>
 								<Route element={<UserManagement />} path='management' />
 							</Route>
+							<Route path='' element={<Navigate to='info' />} />
 						</Route>
 						<Route path='room'>
 							<Route element={<RoomInfo />} path='info' />
 							<Route element={<ProtectedRoute condition={myInfo.role === ADMIN_ROLE} navigate='*' />}>
 								<Route element={<RoomManagement />} path='management' />
 							</Route>
+							<Route path='' element={<Navigate to='info' />} />
 						</Route>
 					</Route>
 				</Route>

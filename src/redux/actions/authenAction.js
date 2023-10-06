@@ -39,3 +39,16 @@ export function signOutAction() {
 		navigate('/sign-in')
 	}
 }
+
+export function validateToken() {
+	return async (dispatch, getState) => {
+		try {
+			const { status, data } = await authenServices.validateToken(localStorage.getItem(ACCESS_TOKEN))
+			if (status === 200) {
+				dispatch(getMyInfoAction())
+			}
+		} catch (error) {
+			dispatch(signOutAction())
+		}
+	}
+}

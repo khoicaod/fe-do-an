@@ -23,6 +23,16 @@ const authenServices = {
 			},
 		})
 	},
+	validateToken(data) {
+		return axios({
+			url: `${LINK_API}/auth/validate-token`,
+			method: 'POST',
+			data,
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+			},
+		})
+	},
 }
 
 export default authenServices
