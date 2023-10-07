@@ -1,5 +1,5 @@
 import { Menu } from 'antd'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoTerminal } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineUser } from 'react-icons/ai'
@@ -8,29 +8,49 @@ import { GoSignOut } from 'react-icons/go'
 import { NavLink, Outlet } from 'react-router-dom'
 import { signOutAction } from '../redux/actions/authenAction'
 import { ADMIN_ROLE } from '../utils/constant'
+import { getAllRoomsOfUserAction } from '../redux/actions/roomAction'
 
 const HomeTemplate = () => {
-	const { myInfo } = useSelector((state) => state.userReducer)
-
 	const dispatch = useDispatch()
-	// useEffect(() => {
-	// 	const socket = new SockJS(LINK_API + '/ws/registry')
-	// 	const stompClient = over(socket)
-	// 	stompClient.connect({}, () => {
-	// 		stompClient.subscribe('/ws/topic/e91ba283-68e5-4e18-8f6a-4a98a6816a7b', (response) => {})
-	// 	})
+	const { myInfo } = useSelector((state) => state.userReducer)
+	const { myRooms } = useSelector((state) => state.roomReducer)
 
-	// 	return () => {
-	// 		stompClient.disconnect()
-	// 	}
-	// }, [])
-	function getItem(label, key, icon, children, type) {
+	const [menuOpenKey, setMenuOpenKey] = useState([window.location.pathname.split('/')[1]])
+
+	useEffect(() => {
+		setMenuOpenKey((prev) => {
+			if (prev.includes(window.location.pathname.split('/')[1])) {
+				return [...prev]
+			} else {
+				return [window.location.pathname.split('/')[1], ...prev]
+			}
+		})
+	}, [window.location.pathname.split('/')[1]])
+
+	useEffect(() => {
+		dispatch(getAllRoomsOfUserAction())
+	}, [])
+
+	function getItem(label, key, icon, children) {
 		return {
 			key,
 			icon,
 			children,
 			label,
-			type,
+			onTitleClick: (e) => {
+				setMenuOpenKey((prev) => {
+					if (prev.includes(e.key)) {
+						const arr = [...prev]
+						arr.splice(
+							arr.findIndex((menu) => menu === e.key),
+							1
+						)
+						return arr
+					} else {
+						return [e.key, ...prev]
+					}
+				})
+			},
 		}
 	}
 	const items = [
@@ -77,37 +97,27 @@ const HomeTemplate = () => {
 			</div>,
 			'room',
 			null,
-			[
-				getItem(
-					<NavLink to={'/room/info'}>
-						{({ isActive }) => (
-							<span className={isActive ? 'text-white font-semibold' : 'text-black font-semibold'}>
-								Room Information
-							</span>
-						)}
-					</NavLink>,
-					'/room/info'
-				),
-				myInfo.role === ADMIN_ROLE
-					? getItem(
-							<NavLink to={'/room/management'}>
+			JSON.stringify(myRooms) !== '{}'
+				? myRooms.map((room) =>
+						getItem(
+							<NavLink to={`/room/info/${room.token}`}>
 								{({ isActive }) => (
 									<span
 										className={isActive ? 'text-white font-semibold' : 'text-black font-semibold'}>
-										Rooms Data
+										{room.name}
 									</span>
 								)}
 							</NavLink>,
-							'/room/management'
-					  )
-					: null,
-			]
+							`/room/info/${room.token}`
+						)
+				  )
+				: null
 		),
 	]
 
 	return (
 		<div className='flex'>
-			<div className='w-2/12 h-screen fixed top-0 left-0 bg-violet-500 py-8 px-4 flex flex-col justify-between items-center'>
+			<div className='w-2/12 h-screen fixed top-0 left-0 bg-violet-500 py-8 p-3 flex flex-col justify-between'>
 				<div>
 					<div className='flex items-center justify-start gap-4 border-b-[1px] border-white pb-6'>
 						<IoTerminal className='w-8 h-8 text-white' />
@@ -117,7 +127,7 @@ const HomeTemplate = () => {
 						<Menu
 							className='w-full rounded-md'
 							selectedKeys={[window.location.pathname]}
-							defaultOpenKeys={['room']}
+							openKeys={menuOpenKey}
 							mode='inline'
 							items={items}
 						/>
@@ -127,16 +137,16 @@ const HomeTemplate = () => {
 					onClick={() => {
 						dispatch(signOutAction())
 					}}
-					className='flex items-center gap-4 text-white font-semibold text-2xl bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 cursor-pointer'>
+					className='flex items-center gap-4 text-white font-semibold text-2xl bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600 cursor-pointer shadow-slate-600 shadow-lg'>
 					<GoSignOut />
 					<span>Sign Out</span>
 				</div>
 			</div>
-			<div className='w-10/12 fixed right-0 top-0 py-8 px-4'>
-				<div className='flex items-center justify-end pb-8'>
+			<div className='w-10/12 absolute right-0 top-0 py-8 px-4'>
+				<div className='flex items-center justify-end p-4 fixed top-0 right-0 bg-black opacity-50 w-10/12'>
 					<div className='flex items-center gap-4 font-semibold'>
 						<h1>
-							Welcome Back, <span className='text-violet-500 underline'>{myInfo.fullName}</span>
+							Welcome Back, <span className='text-white underline'>{myInfo.fullName}</span>
 						</h1>
 						<div className='w-14 h-14 rounded-full bg-violet-500'>
 							<img
@@ -147,7 +157,9 @@ const HomeTemplate = () => {
 						</div>
 					</div>
 				</div>
-				<Outlet />
+				<div className='pt-20'>
+					<Outlet />
+				</div>
 			</div>
 		</div>
 	)

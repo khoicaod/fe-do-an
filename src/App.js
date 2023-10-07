@@ -10,7 +10,6 @@ import NotFound from './pages/NotFound'
 import UserInfo from './pages/UserInfo'
 import UserManagement from './pages/UserManagement'
 import RoomInfo from './pages/RoomInfo'
-import RoomManagement from './pages/RoomManagement'
 import { ACCESS_TOKEN, ADMIN_ROLE, ROLE } from './utils/constant'
 import HomeTemplate from './templates/HomeTemplate'
 import { validateToken } from './redux/actions/authenAction'
@@ -52,16 +51,7 @@ function App() {
 							<Route path='' element={<Navigate to='info' />} />
 						</Route>
 						<Route path='room'>
-							<Route element={<RoomInfo />} path='info' />
-							<Route
-								element={
-									<ProtectedRoute
-										condition={localStorage.getItem(ROLE) === ADMIN_ROLE}
-										navigate='*'
-									/>
-								}>
-								<Route element={<RoomManagement />} path='management' />
-							</Route>
+							<Route element={<RoomInfo />} path='info/:token' />
 							<Route path='' element={<Navigate to='info' />} />
 						</Route>
 					</Route>

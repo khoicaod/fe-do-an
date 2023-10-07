@@ -1,5 +1,5 @@
 import authenServices from '../../services/authenService'
-import { ACCESS_TOKEN, ROLE } from '../../utils/constant'
+import { ACCESS_TOKEN, ROLE, USER_ID } from '../../utils/constant'
 import { getMyInfoAction } from './userAction'
 
 export function signInAction(payload) {
@@ -10,7 +10,7 @@ export function signInAction(payload) {
 			if (status === 200) {
 				localStorage.setItem(ACCESS_TOKEN, data.data)
 				await dispatch(getMyInfoAction())
-				navigate('/room/info')
+				navigate('/user/info')
 			}
 		} catch (error) {
 			alert(error.response?.data.message)
@@ -37,6 +37,7 @@ export function signOutAction() {
 		const { navigate } = getState().navigateReducer
 		localStorage.removeItem(ACCESS_TOKEN)
 		localStorage.removeItem(ROLE)
+		localStorage.removeItem(USER_ID)
 		navigate('/sign-in')
 	}
 }
