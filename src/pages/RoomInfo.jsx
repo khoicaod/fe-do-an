@@ -7,6 +7,7 @@ import { over } from 'stompjs'
 import { FaFireFlameCurved, FaGasPump, FaGaugeSimpleHigh, FaTemperatureHalf } from 'react-icons/fa6'
 import { PiSneakerMoveFill } from 'react-icons/pi'
 import { WiHumidity } from 'react-icons/wi'
+import { MdGasMeter } from 'react-icons/md'
 import { ImSwitch } from 'react-icons/im'
 import { Switch } from 'antd'
 import { updateHardwareAction } from '../redux/actions/roomAction'
@@ -71,7 +72,7 @@ const RoomInfo = () => {
 			</h1>
 			<div className='grid grid-cols-4 gap-8'>
 				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
-					<FaGasPump className='text-blue-500 text-7xl' />
+					<MdGasMeter className='text-blue-500 text-7xl' />
 					<h1 className='font-semibold text-4xl'>Gas Sensor</h1>
 					<h1 className='font-semibold text-2xl'>{hardware?.gasSensorValue}</h1>
 				</div>
