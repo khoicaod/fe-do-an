@@ -4,7 +4,12 @@ import { useParams } from 'react-router-dom'
 import SockJS from 'sockjs-client'
 import { LINK_API } from '../utils/constant'
 import { over } from 'stompjs'
+import { FaFireFlameCurved, FaGasPump, FaGaugeSimpleHigh, FaTemperatureHalf } from 'react-icons/fa6'
+import { PiSneakerMoveFill } from 'react-icons/pi'
+import { WiHumidity } from 'react-icons/wi'
+import { ImSwitch } from 'react-icons/im'
 import { Switch } from 'antd'
+import { updateHardwareAction } from '../redux/actions/roomAction'
 
 const defaultHardwareValue = {
 	gasSensorValue: 'N/A',
@@ -22,10 +27,9 @@ const defaultHardwareValue = {
 
 const RoomInfo = () => {
 	const { myRooms } = useSelector((state) => state.roomReducer)
+	const dispatch = useDispatch()
 
 	const pathVariable = useParams().token
-
-	const stompClientRef = useRef(null)
 
 	const [hardware, setHardware] = useState()
 	const [thisRoom, setThisRoom] = useState()
@@ -36,7 +40,6 @@ const RoomInfo = () => {
 		const socket = new SockJS(LINK_API + '/ws/registry')
 		const stompClient = over(socket)
 		stompClient.connect({}, () => {
-			stompClientRef.current = stompClient
 			stompClient.subscribe(`/ws/topic/${pathVariable}`, (response) => {
 				const data = JSON.parse(response.body)
 				setHardware(data)
@@ -58,79 +61,131 @@ const RoomInfo = () => {
 
 	return (
 		<div className='flex flex-col gap-4 p-8 shadow-slate-600 shadow-lg rounded-2xl'>
-			<h1>Status: {thisRoom?.isUsed ? 'ACTIVE' : 'IN ACTIVE'}</h1>
-			<ul>
-				<li>
-					<strong>Gas Sensor Value:</strong> {hardware?.gasSensorValue}
-				</li>
-				<li>
-					<strong>Flame Sensor Value:</strong> {hardware?.flameSensorValue}
-				</li>
-				<li>
-					<strong>Pressure Sensor Value:</strong> {hardware?.pressureSensorValue}
-				</li>
-				<li>
-					<strong>Motion Sensor Value:</strong> {hardware?.motionSensorValue}
-				</li>
-				<li>
-					<strong>Temperature Sensor Value:</strong> {hardware?.temperatureSensorValue}
-				</li>
-				<li>
-					<strong>Humidity Sensor Value:</strong> {hardware?.humiditySensorValue}
-				</li>
-				<li>
-					<strong>Second Motion Sensor Value:</strong> {hardware?.secondMotionSensorValue}
-				</li>
-				<li>
-					<strong>AC Switch:</strong>{' '}
+			<h1 className='text-4xl'>
+				Hardware Status:{' '}
+				{thisRoom?.isUsed ? (
+					<span className='text-green-500'>Active</span>
+				) : (
+					<span className='text-red-500'>In Active</span>
+				)}
+			</h1>
+			<div className='grid grid-cols-4 gap-8'>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<FaGasPump className='text-blue-500 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Gas Sensor</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.gasSensorValue}</h1>
+				</div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<FaFireFlameCurved className='text-red-500 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Flame Sensor</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.flameSensorValue}</h1>
+				</div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<FaGaugeSimpleHigh className='text-green-700 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Pressure Sensor</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.pressureSensorValue}</h1>
+				</div>
+				<div></div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<FaTemperatureHalf className='text-red-500 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Temperature Sensor</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.temperatureSensorValue}</h1>
+				</div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<WiHumidity className='text-blue-500 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Humid Sensor</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.humiditySensorValue}</h1>
+				</div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<PiSneakerMoveFill className='text-green-700 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Motion Sensor 1</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.motionSensorValue}</h1>
+				</div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<PiSneakerMoveFill className='text-purple-600 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Motion Sensor 2</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.secondMotionSensorValue}</h1>
+				</div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<ImSwitch
+						className={`${hardware?.acSwitch ? 'text-green-600' : 'text-red-600'} text-7xl transition-all`}
+					/>
+					<h1 className='font-semibold text-4xl'>AC Switch</h1>
 					<Switch
 						onChange={(e) => {
-							stompClientRef.current.send(
-								`/ws/hardware/button/${pathVariable}`,
-								{},
-								JSON.stringify({ ...hardware, acSwitch: e })
+							dispatch(
+								updateHardwareAction({
+									pk: thisRoom.pk,
+									data: {
+										acSwitch: e,
+										acPumpSwitch: hardware.acPumpSwitch,
+										reservedSwitch: hardware.reservedSwitch,
+										isShutdown: false,
+										isReboot: false,
+									},
+								})
 							)
 							setHardware({ ...hardware, acSwitch: e })
 						}}
-						id='acSwitch'
-						style={{ backgroundColor: hardware?.acSwitch ? 'green' : 'orange' }}
 						checked={hardware?.acSwitch}
+						style={{ backgroundColor: hardware?.acSwitch ? 'green' : 'red' }}
 					/>
-				</li>
-				<li>
-					<strong>AC Pump Switch:</strong>{' '}
+				</div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<ImSwitch
+						className={`${
+							hardware?.acPumpSwitch ? 'text-green-600' : 'text-red-600'
+						} text-7xl transition-all`}
+					/>
+					<h1 className='font-semibold text-4xl'>AC Pump Switch</h1>
 					<Switch
 						onChange={(e) => {
-							stompClientRef.current.send(
-								`/ws/hardware/button/${pathVariable}`,
-								{},
-								JSON.stringify({ ...hardware, acPumpSwitch: e })
+							dispatch(
+								updateHardwareAction({
+									pk: thisRoom.pk,
+									data: {
+										acSwitch: hardware.acSwitch,
+										acPumpSwitch: e,
+										reservedSwitch: hardware.reservedSwitch,
+										isShutdown: false,
+										isReboot: false,
+									},
+								})
 							)
 							setHardware({ ...hardware, acPumpSwitch: e })
 						}}
-						style={{ backgroundColor: hardware?.acPumpSwitch ? 'green' : 'orange' }}
 						checked={hardware?.acPumpSwitch}
+						style={{ backgroundColor: hardware?.acPumpSwitch ? 'green' : 'red' }}
 					/>
-				</li>
-				<li>
-					<strong>Reserved Switch:</strong>{' '}
+				</div>
+				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
+					<ImSwitch
+						className={`${
+							hardware?.reservedSwitch ? 'text-green-600' : 'text-red-600'
+						} text-7xl transition-all`}
+					/>
+					<h1 className='font-semibold text-4xl'>Reserved Switch</h1>
 					<Switch
 						onChange={(e) => {
-							stompClientRef.current.send(
-								`/ws/hardware/button/${pathVariable}`,
-								{},
-								JSON.stringify({ ...hardware, reservedSwitch: e })
+							dispatch(
+								updateHardwareAction({
+									pk: thisRoom.pk,
+									data: {
+										acSwitch: hardware.acSwitch,
+										acPumpSwitch: hardware.acPumpSwitch,
+										reservedSwitch: e,
+										isShutdown: false,
+										isReboot: false,
+									},
+								})
 							)
 							setHardware({ ...hardware, reservedSwitch: e })
 						}}
-						style={{ backgroundColor: hardware?.reservedSwitch ? 'green' : 'orange' }}
 						checked={hardware?.reservedSwitch}
+						style={{ backgroundColor: hardware?.reservedSwitch ? 'green' : 'red' }}
 					/>
-				</li>
-				<li>
-					<strong>Updated On:</strong> {hardware?.updatedOn}
-				</li>
-			</ul>
+				</div>
+			</div>
 		</div>
 	)
 }

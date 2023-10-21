@@ -2,13 +2,14 @@ import { Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { IoTerminal } from 'react-icons/io5'
 import { useDispatch, useSelector } from 'react-redux'
-import { AiOutlineUser } from 'react-icons/ai'
+import { AiOutlineUser, AiOutlinePlusSquare } from 'react-icons/ai'
 import { BsDoorOpen } from 'react-icons/bs'
 import { GoSignOut } from 'react-icons/go'
 import { NavLink, Outlet } from 'react-router-dom'
 import { signOutAction } from '../redux/actions/authenAction'
 import { ADMIN_ROLE } from '../utils/constant'
 import { getAllRoomsOfUserAction } from '../redux/actions/roomAction'
+import { actionOpenModal } from '../redux/actions/ModalAction'
 
 const HomeTemplate = () => {
 	const dispatch = useDispatch()
@@ -113,6 +114,32 @@ const HomeTemplate = () => {
 				  )
 				: null
 		),
+		myInfo.role === ADMIN_ROLE
+			? {
+					label: (
+						<div className='flex items-center gap-2'>
+							<AiOutlinePlusSquare className='text-lg text-violet-600' />
+							<h1 className='text-violet-600 font-semibold text-md'>Add/Update Room</h1>
+						</div>
+					),
+					type: 'group',
+					icon: null,
+					children: [
+						{
+							label: <span className='text-black font-semibold'>Add New Room</span>,
+							onClick: () => {
+								dispatch(actionOpenModal('Add New Room', <></>))
+							},
+						},
+						{
+							label: <span className='text-black font-semibold'>Update Room Info</span>,
+							onClick: () => {
+								dispatch(actionOpenModal('Update Room Info', <></>))
+							},
+						},
+					],
+			  }
+			: null,
 	]
 
 	return (
