@@ -1,7 +1,8 @@
-import { GET_MY_INFO } from '../constants/userConstant'
+import { GET_ALL_USER, GET_MY_INFO } from '../constants/userConstant'
 
 const initialState = {
 	myInfo: {},
+	users: [],
 }
 
 export default function userReducer(state = initialState, { type, payload }) {
@@ -11,7 +12,10 @@ export default function userReducer(state = initialState, { type, payload }) {
 			newState.myInfo = payload
 			return newState
 		}
-
+		case GET_ALL_USER: {
+			newState.users = payload
+			return newState
+		}
 		default:
 			return state
 	}

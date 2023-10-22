@@ -1,6 +1,9 @@
+import CopyToClipboard from 'react-copy-to-clipboard'
 import roomService from '../../services/roomService'
 import { ADMIN_ROLE, USER_ID } from '../../utils/constant'
 import { GET_MY_ROOMS } from '../constants/roomConstant'
+import { actionOpenModal } from './ModalAction'
+import { AiFillCopy } from 'react-icons/ai'
 
 export function getAllRoomsOfUserAction() {
 	return async (dispatch, getState) => {
@@ -30,6 +33,34 @@ export function updateHardwareAction(payload) {
 			}
 		} catch (error) {
 			alert(error.response?.data.message)
+		}
+	}
+}
+
+export function createRoomAction(payload) {
+	return async (dispatch, getState) => {
+		if (payload.roomName.trim() === '' || payload.userPk === null) {
+			alert('Please Input Room Name And Select User')
+		} else {
+			try {
+				const { status, data } = await roomService.createRoom(payload)
+				if (status === 200) {
+					dispatch(
+						actionOpenModal(
+							'Room Register Token',
+							<CopyToClipboard text={data.data}>
+								<div className='flex items-center gap-6 justify-center text-violet-500 font-semibold text-2xl cursor-pointer'>
+									<span className=''>{data.data}</span>
+									<AiFillCopy className='' />
+								</div>
+							</CopyToClipboard>
+						)
+					)
+					dispatch(getAllRoomsOfUserAction())
+				}
+			} catch (error) {
+				alert(error.response?.data.message)
+			}
 		}
 	}
 }

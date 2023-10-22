@@ -30,6 +30,15 @@ const roomService = {
 			},
 		})
 	},
+	createRoom(payload) {
+		return axios({
+			url: `${LINK_API}/room/create?room-name=${payload.roomName}&user-pk=${payload.userPk}`,
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+			},
+		})
+	},
 }
 
 export default roomService

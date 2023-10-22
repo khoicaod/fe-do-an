@@ -11,6 +11,15 @@ const userService = {
 			},
 		})
 	},
+	getAllUser() {
+		return axios({
+			url: `${LINK_API}/user/all`,
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+			},
+		})
+	},
 }
 
 export default userService

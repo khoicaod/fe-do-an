@@ -10,6 +10,7 @@ import { signOutAction } from '../redux/actions/authenAction'
 import { ADMIN_ROLE } from '../utils/constant'
 import { getAllRoomsOfUserAction } from '../redux/actions/roomAction'
 import { actionOpenModal } from '../redux/actions/ModalAction'
+import CreateRoom from '../pages/CreateRoom'
 
 const HomeTemplate = () => {
 	const dispatch = useDispatch()
@@ -128,7 +129,7 @@ const HomeTemplate = () => {
 						{
 							label: <span className='text-black font-semibold'>Add New Room</span>,
 							onClick: () => {
-								dispatch(actionOpenModal('Add New Room', <></>))
+								dispatch(actionOpenModal('Add New Room', <CreateRoom />))
 							},
 						},
 						{

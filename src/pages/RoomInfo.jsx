@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import SockJS from 'sockjs-client'
@@ -46,19 +46,16 @@ const RoomInfo = () => {
 				setHardware(data)
 			})
 		})
+		if (myRooms.length > 0) {
+			const thisRoom = myRooms.find((room) => room.token === pathVariable)
+			setThisRoom(thisRoom)
+		}
 		return () => {
 			if (stompClient.connected) {
 				stompClient.disconnect()
 			}
 		}
-	}, [pathVariable])
-
-	useEffect(() => {
-		if (myRooms.length > 0) {
-			const thisRoom = myRooms.find((room) => room.token === pathVariable)
-			setThisRoom(thisRoom)
-		}
-	}, [myRooms])
+	}, [pathVariable, myRooms.length])
 
 	return (
 		<div className='flex flex-col gap-4 p-8 shadow-slate-600 shadow-lg rounded-2xl'>
