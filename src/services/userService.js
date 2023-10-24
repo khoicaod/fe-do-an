@@ -20,6 +20,16 @@ const userService = {
 			},
 		})
 	},
+	updateUserInfo(data, userPk) {
+		return axios({
+			url: `${LINK_API}/user/update/${userPk}`,
+			method: 'PUT',
+			data,
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+			},
+		})
+	},
 }
 
 export default userService

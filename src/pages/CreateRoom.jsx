@@ -52,7 +52,7 @@ const CreateRoom = () => {
 					onClick={() => {
 						dispatch(createRoomAction({ roomName, userPk }))
 					}}
-					className='bg-green-500 text-lg rounded-md py-2 px-4 font-semibold shadow-lg shadow-gray-500'>
+					className='bg-blue-500 text-lg text-white rounded-md py-2 px-4 font-semibold shadow-lg shadow-gray-500'>
 					Submit
 				</button>
 			</div>
