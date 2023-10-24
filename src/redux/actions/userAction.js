@@ -29,3 +29,18 @@ export function getAllUserAction() {
 		}
 	}
 }
+
+export function updateUserAction(payload, userPk) {
+	return async (dispatch, getState) => {
+		try {
+			const { status, data } = await userService.updateUserInfo(payload, userPk)
+			if (status === 200) {
+				alert('User Info Update Successfully')
+				await dispatch(getAllUserAction())
+				await dispatch(getMyInfoAction())
+			}
+		} catch (error) {
+			alert(error.response?.data.message)
+		}
+	}
+}
