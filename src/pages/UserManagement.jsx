@@ -65,6 +65,11 @@ const UserManagement = () => {
 	return (
 		<div className='flex flex-col gap-8'>
 			<h1 className='text-4xl font-semibold'>User Management</h1>
+			<div>
+				<button className='bg-green-700 py-2 px-4 font-semibold text-white rounded-lg shadow-lg shadow-gray-500'>
+					Add New User
+				</button>
+			</div>
 			<Table
 				rowKey={(record) => {
 					return record.pk

@@ -39,6 +39,15 @@ const roomService = {
 			},
 		})
 	},
+	getHardwareUpdateHistories(data) {
+		return axios({
+			url: `${LINK_API}/room/${data.roomPk}/hardware-histories-of-week?week=${data.week}`,
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+			},
+		})
+	},
 }
 
 export default roomService

@@ -1,7 +1,7 @@
 import CopyToClipboard from 'react-copy-to-clipboard'
 import roomService from '../../services/roomService'
 import { ADMIN_ROLE, USER_ID } from '../../utils/constant'
-import { GET_MY_ROOMS } from '../constants/roomConstant'
+import { GET_HARDWARE_HISTORIES, GET_MY_ROOMS } from '../constants/roomConstant'
 import { actionOpenModal } from './ModalAction'
 import { AiFillCopy } from 'react-icons/ai'
 
@@ -61,6 +61,18 @@ export function createRoomAction(payload) {
 			} catch (error) {
 				alert(error.response?.data.message)
 			}
+		}
+	}
+}
+export function getHardwareUpdateHistories(payload) {
+	return async (dispatch, getState) => {
+		try {
+			const { status, data } = await roomService.getHardwareUpdateHistories(payload)
+			if (status === 200) {
+				dispatch({ type: GET_HARDWARE_HISTORIES, payload: data.data })
+			}
+		} catch (error) {
+			alert(error.response?.data.message)
 		}
 	}
 }

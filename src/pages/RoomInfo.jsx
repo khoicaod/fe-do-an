@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import SockJS from 'sockjs-client'
-import { LINK_API } from '../utils/constant'
+import { DAYS_OF_WEEK, LINK_API } from '../utils/constant'
 import { over } from 'stompjs'
 import { FaFireFlameCurved, FaGasPump, FaGaugeSimpleHigh, FaTemperatureHalf } from 'react-icons/fa6'
 import { PiSneakerMoveFill } from 'react-icons/pi'
@@ -10,7 +10,9 @@ import { WiHumidity } from 'react-icons/wi'
 import { MdGasMeter } from 'react-icons/md'
 import { ImSwitch } from 'react-icons/im'
 import { Switch } from 'antd'
-import { updateHardwareAction } from '../redux/actions/roomAction'
+import { getHardwareUpdateHistories, updateHardwareAction } from '../redux/actions/roomAction'
+import { Bar } from 'react-chartjs-2'
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 
 const defaultHardwareValue = {
 	gasSensorValue: 'N/A',
@@ -26,14 +28,26 @@ const defaultHardwareValue = {
 	updatedOn: 'N/A',
 }
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+
+const options = {
+	responsive: true,
+	plugins: {
+		legend: {
+			position: 'top',
+		},
+	},
+}
+
 const RoomInfo = () => {
-	const { myRooms } = useSelector((state) => state.roomReducer)
+	const { myRooms, hardwareHistories } = useSelector((state) => state.roomReducer)
 	const dispatch = useDispatch()
 
 	const pathVariable = useParams().token
 
 	const [hardware, setHardware] = useState()
 	const [thisRoom, setThisRoom] = useState()
+	const [week, setWeek] = useState(0)
 
 	useEffect(() => {
 		setHardware(defaultHardwareValue)
@@ -41,6 +55,7 @@ const RoomInfo = () => {
 		const socket = new SockJS(LINK_API + '/ws/registry')
 		const stompClient = over(socket)
 		stompClient.connect({}, () => {
+			console.log('success')
 			stompClient.subscribe(`/ws/topic/${pathVariable}`, (response) => {
 				const data = JSON.parse(response.body)
 				setHardware(data)
@@ -48,6 +63,7 @@ const RoomInfo = () => {
 		})
 		if (myRooms.length > 0) {
 			const thisRoom = myRooms.find((room) => room.token === pathVariable)
+			dispatch(getHardwareUpdateHistories({ roomPk: thisRoom.pk, week }))
 			setThisRoom(thisRoom)
 		}
 		return () => {
@@ -55,10 +71,81 @@ const RoomInfo = () => {
 				stompClient.disconnect()
 			}
 		}
-	}, [pathVariable, myRooms.length])
+	}, [pathVariable, myRooms.length, week])
+
+	const data = {
+		labels: DAYS_OF_WEEK.map((day) => day.display),
+		datasets: [
+			{
+				label: 'gasSensorValue',
+				data: DAYS_OF_WEEK.map((day) => {
+					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
+					return dayFound?.gasSensorValue
+				}),
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(142, 68, 199, 0.5)',
+			},
+			{
+				label: 'flameSensorValue',
+				data: DAYS_OF_WEEK.map((day) => {
+					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
+					return dayFound?.flameSensorValue
+				}),
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(55, 217, 98, 0.5)',
+			},
+			{
+				label: 'pressureSensorValue',
+				data: DAYS_OF_WEEK.map((day) => {
+					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
+					return dayFound?.pressureSensorValue
+				}),
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(201, 45, 67, 0.5)',
+			},
+			{
+				label: 'motionSensorValue',
+				data: DAYS_OF_WEEK.map((day) => {
+					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
+					return dayFound?.motionSensorValue
+				}),
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(33, 150, 234, 0.5)',
+			},
+			{
+				label: 'secondMotionSensorValue',
+				data: DAYS_OF_WEEK.map((day) => {
+					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
+					return dayFound?.secondMotionSensorValue
+				}),
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(255, 128, 0, 0.5)',
+			},
+			{
+				label: 'temperatureSensorValue',
+				data: DAYS_OF_WEEK.map((day) => {
+					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
+					return dayFound?.temperatureSensorValue
+				}),
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(82, 184, 71, 0.5)',
+			},
+			{
+				label: 'humiditySensorValue',
+				data: DAYS_OF_WEEK.map((day) => {
+					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
+					return dayFound?.humiditySensorValue
+				}),
+				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgba(240, 62, 126, 0.5)',
+			},
+		],
+	}
 
 	return (
 		<div className='flex flex-col gap-4 p-8 shadow-slate-600 shadow-lg rounded-2xl'>
+			<h1 className='text-4xl'>Statistics for the week</h1>
+			<Bar options={options} data={data} />
 			<h1 className='text-4xl'>
 				Hardware Status:{' '}
 				{thisRoom?.isUsed ? (
