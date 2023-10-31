@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom'
 import SockJS from 'sockjs-client'
 import { DAYS_OF_WEEK, LINK_API } from '../utils/constant'
 import { over } from 'stompjs'
-import { FaFireFlameCurved, FaGasPump, FaGaugeSimpleHigh, FaTemperatureHalf } from 'react-icons/fa6'
-import { PiSneakerMoveFill } from 'react-icons/pi'
+import { FaFireFlameCurved, FaGaugeSimpleHigh, FaTemperatureHalf } from 'react-icons/fa6'
+import { MdOutlineElectricalServices } from 'react-icons/md'
 import { WiHumidity } from 'react-icons/wi'
 import { MdGasMeter } from 'react-icons/md'
 import { ImSwitch } from 'react-icons/im'
@@ -18,10 +18,10 @@ const defaultHardwareValue = {
 	gasSensorValue: 'N/A',
 	flameSensorValue: 'N/A',
 	pressureSensorValue: 'N/A',
-	motionSensorValue: 'N/A',
+	ampSensorValue: 'N/A',
 	temperatureSensorValue: 'N/A',
 	humiditySensorValue: 'N/A',
-	secondMotionSensorValue: 'N/A',
+	secondAmpSensorValue: 'N/A',
 	acSwitch: false,
 	acPumpSwitch: false,
 	reservedSwitch: false,
@@ -104,19 +104,19 @@ const RoomInfo = () => {
 				backgroundColor: 'rgba(201, 45, 67, 0.5)',
 			},
 			{
-				label: 'motionSensorValue',
+				label: 'ampSensorValue',
 				data: DAYS_OF_WEEK.map((day) => {
 					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
-					return dayFound?.motionSensorValue
+					return dayFound?.ampSensorValue
 				}),
 				borderColor: 'rgb(255, 99, 132)',
 				backgroundColor: 'rgba(33, 150, 234, 0.5)',
 			},
 			{
-				label: 'secondMotionSensorValue',
+				label: 'secondAmpSensorValue',
 				data: DAYS_OF_WEEK.map((day) => {
 					const dayFound = hardwareHistories.find((item) => item.dateOfWeek === day.value)
-					return dayFound?.secondMotionSensorValue
+					return dayFound?.secondAmpSensorValue
 				}),
 				borderColor: 'rgb(255, 99, 132)',
 				backgroundColor: 'rgba(255, 128, 0, 0.5)',
@@ -182,14 +182,14 @@ const RoomInfo = () => {
 					<h1 className='font-semibold text-2xl'>{hardware?.humiditySensorValue}</h1>
 				</div>
 				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
-					<PiSneakerMoveFill className='text-green-700 text-7xl' />
-					<h1 className='font-semibold text-4xl'>Motion Sensor 1</h1>
-					<h1 className='font-semibold text-2xl'>{hardware?.motionSensorValue}</h1>
+					<MdOutlineElectricalServices className='text-green-700 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Ampere Sensor 1</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.ampSensorValue}</h1>
 				</div>
 				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
-					<PiSneakerMoveFill className='text-purple-600 text-7xl' />
-					<h1 className='font-semibold text-4xl'>Motion Sensor 2</h1>
-					<h1 className='font-semibold text-2xl'>{hardware?.secondMotionSensorValue}</h1>
+					<MdOutlineElectricalServices className='text-purple-600 text-7xl' />
+					<h1 className='font-semibold text-4xl'>Ampere Sensor 2</h1>
+					<h1 className='font-semibold text-2xl'>{hardware?.secondAmpSensorValue}</h1>
 				</div>
 				<div className='h-64 bg-violet-400 rounded-2xl flex flex-col gap-4 items-center justify-center shadow-lg shadow-slate-600'>
 					<ImSwitch
