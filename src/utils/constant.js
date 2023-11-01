@@ -19,3 +19,9 @@ export const DAYS_OF_WEEK = [
 	{ display: 'Saturday', value: 5 },
 	{ display: 'Sunday', value: 6 },
 ]
+
+export const HOURS_IN_DAY = Array.from({ length: 24 }, (_, i) => i)
+
+export const DAYS_IN_MONTH = Array.from({ length: 31 }, (_, i) => i + 1)
+
+export const MONTHS_IN_YEAR = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]

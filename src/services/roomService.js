@@ -48,6 +48,15 @@ const roomService = {
 			},
 		})
 	},
+	getPowerAndWaterConsumptionHistories(data) {
+		return axios({
+			url: `${LINK_API}/room/${data.roomPk}/power-water-consumption-histories?timeType=${data.timeType}&timeFilter=${data.timeFilter}`,
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+			},
+		})
+	},
 }
 
 export default roomService

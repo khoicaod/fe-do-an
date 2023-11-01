@@ -1,8 +1,9 @@
-import { GET_HARDWARE_HISTORIES, GET_MY_ROOMS } from '../constants/roomConstant'
+import { GET_HARDWARE_HISTORIES, GET_MY_ROOMS, GET_POWER_WATER_HISTORIES } from '../constants/roomConstant'
 
 const initialState = {
 	myRooms: {},
 	hardwareHistories: [],
+	powerAndWaterHistories: [],
 }
 
 export default function roomReducer(state = initialState, { type, payload }) {
@@ -16,7 +17,10 @@ export default function roomReducer(state = initialState, { type, payload }) {
 			newState.hardwareHistories = payload
 			return newState
 		}
-
+		case GET_POWER_WATER_HISTORIES: {
+			newState.powerAndWaterHistories = payload
+			return newState
+		}
 		default:
 			return state
 	}
