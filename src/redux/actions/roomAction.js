@@ -8,6 +8,7 @@ import { closeLoadingAction, openLoadingAction } from './loadingAction'
 
 export function getAllRoomsOfUserAction() {
 	return async (dispatch, getState) => {
+		dispatch(openLoadingAction())
 		try {
 			let response
 			if (localStorage.getItem('ROLE') === ADMIN_ROLE) {
@@ -22,6 +23,7 @@ export function getAllRoomsOfUserAction() {
 		} catch (error) {
 			alert(error.response?.data.message)
 		}
+		dispatch(closeLoadingAction())
 	}
 }
 
@@ -64,10 +66,12 @@ export function createRoomAction(payload) {
 				alert(error.response?.data.message)
 			}
 		}
+		dispatch(closeLoadingAction())
 	}
 }
 export function getHardwareUpdateHistories(payload) {
 	return async (dispatch, getState) => {
+		dispatch(openLoadingAction())
 		try {
 			const { status, data } = await roomService.getHardwareUpdateHistories(payload)
 			if (status === 200) {

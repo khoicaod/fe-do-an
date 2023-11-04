@@ -35,6 +35,7 @@ export function getAllUserAction() {
 
 export function updateUserAction(payload, userPk) {
 	return async (dispatch, getState) => {
+		dispatch(openLoadingAction())
 		try {
 			const { status, data } = await userService.updateUserInfo(payload, userPk)
 			if (status === 200) {
@@ -45,6 +46,7 @@ export function updateUserAction(payload, userPk) {
 		} catch (error) {
 			alert(error.response?.data.message)
 		}
+		dispatch(closeLoadingAction())
 	}
 }
 
