@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
+import Loading from './components/Loading'
 import ModalBase from './components/ModalBase'
 import AuthenTemplate from './templates/AuthenTemplate'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ASSIGN_NAVIGATE } from './redux/constants/navigateConstant'
 import NotFound from './pages/NotFound'
 import UserInfo from './pages/UserInfo'
@@ -20,6 +21,8 @@ function App() {
 
 	const navigate = useNavigate()
 
+	const { isLoading } = useSelector((state) => state.loadingReducer)
+
 	useEffect(() => {
 		dispatch({ type: ASSIGN_NAVIGATE, payload: navigate })
 
@@ -30,6 +33,7 @@ function App() {
 
 	return (
 		<div id='App' className='w-full min-h-screen'>
+			{isLoading ? <Loading /> : null}
 			<ModalBase />
 			<Routes>
 				<Route element={<AuthenTemplate />}>

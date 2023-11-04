@@ -1,4 +1,4 @@
-export const LINK_API = 'http://localhost:8080'
+export const LINK_API = 'http://14.186.17.158:8080'
 
 export const ACCESS_TOKEN = 'ACCESS_TOKEN'
 

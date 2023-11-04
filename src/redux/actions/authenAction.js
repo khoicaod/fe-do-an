@@ -1,10 +1,12 @@
 import authenServices from '../../services/authenService'
 import { ACCESS_TOKEN, ROLE, USER_ID } from '../../utils/constant'
 import { getMyInfoAction } from './userAction'
+import { closeLoadingAction, openLoadingAction } from './loadingAction'
 
 export function signInAction(payload) {
 	return async (dispatch, getState) => {
 		const { navigate } = getState().navigateReducer
+		dispatch(openLoadingAction())
 		try {
 			const { status, data } = await authenServices.signIn(payload)
 			if (status === 200) {
@@ -15,6 +17,7 @@ export function signInAction(payload) {
 		} catch (error) {
 			alert(error.response?.data.message)
 		}
+		dispatch(closeLoadingAction())
 	}
 }
 
