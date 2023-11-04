@@ -4,6 +4,7 @@ import { ADMIN_ROLE, USER_ID } from '../../utils/constant'
 import { GET_HARDWARE_HISTORIES, GET_MY_ROOMS, GET_POWER_WATER_HISTORIES } from '../constants/roomConstant'
 import { actionOpenModal } from './ModalAction'
 import { AiFillCopy } from 'react-icons/ai'
+import { closeLoadingAction, openLoadingAction } from './loadingAction'
 
 export function getAllRoomsOfUserAction() {
 	return async (dispatch, getState) => {
@@ -39,6 +40,7 @@ export function updateHardwareAction(payload) {
 
 export function createRoomAction(payload) {
 	return async (dispatch, getState) => {
+		dispatch(openLoadingAction())
 		if (payload.roomName.trim() === '' || payload.userPk === null) {
 			alert('Please Input Room Name And Select User')
 		} else {
@@ -74,11 +76,13 @@ export function getHardwareUpdateHistories(payload) {
 		} catch (error) {
 			alert(error.response?.data.message)
 		}
+		dispatch(closeLoadingAction())
 	}
 }
 
 export function getPowerAndWaterConsumptionHistoriesAction(payload) {
 	return async (dispatch, getState) => {
+		dispatch(openLoadingAction())
 		try {
 			const { status, data } = await roomService.getPowerAndWaterConsumptionHistories(payload)
 			if (status === 200) {
@@ -87,5 +91,6 @@ export function getPowerAndWaterConsumptionHistoriesAction(payload) {
 		} catch (error) {
 			alert(error.response?.data.message)
 		}
+		dispatch(closeLoadingAction())
 	}
 }

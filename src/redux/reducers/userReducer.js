@@ -1,7 +1,15 @@
 import { GET_ALL_USER, GET_MY_INFO } from '../constants/userConstant'
 
 const initialState = {
-	myInfo: {},
+	myInfo: {
+		username: '',
+		address: '',
+		email: '',
+		phoneNumber: '',
+		fullName: '',
+		currentPassword: '',
+		newPassword: '',
+	},
 	users: [],
 }
 

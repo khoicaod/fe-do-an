@@ -63,7 +63,7 @@ function App() {
 					</Route>
 				</Route>
 
-				<Route path='' element={<Navigate to='/room/info' />} />
+				<Route path='' element={<Navigate to='/user/info' />} />
 				<Route path='*' element={<Navigate to='/not-found' />} />
 				<Route path='/not-found' element={<NotFound />} />
 			</Routes>

@@ -1,8 +1,10 @@
 import { Table } from 'antd'
 import React, { useEffect } from 'react'
-import { getAllUserAction } from '../redux/actions/userAction'
+import { deleteUserAction, getAllUserAction } from '../redux/actions/userAction'
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
+import { actionOpenModal } from '../redux/actions/ModalAction'
+import AddUser from '../components/AddUser'
 
 const UserManagement = () => {
 	const dispatch = useDispatch()
@@ -42,20 +44,21 @@ const UserManagement = () => {
 			render(text, record) {
 				return (
 					<div className='flex gap-4 justify-center'>
-						<span
+						<button
 							onClick={() => {
-								if (window.confirm('Bạn muốn xóa phim này ?') === true) {
-									// dispatch(actionXoaPhim(record.maPhim))
+								if (window.confirm('Are You Sure To Delete This User ?') === true) {
+									dispatch(deleteUserAction(record.pk))
 								}
 							}}
+							disabled={record.username === 'admin'}
 							className='text-red-500 cursor-pointer text-2xl'>
 							<AiFillDelete />
-						</span>
-						<span
+						</button>
+						<button
 							// onClick={() => navigate(`edit-film/${record.maPhim}`)}
 							className='text-blue-500 cursor-pointer text-2xl'>
 							<AiFillEdit />
-						</span>
+						</button>
 					</div>
 				)
 			},
@@ -66,7 +69,9 @@ const UserManagement = () => {
 		<div className='flex flex-col gap-8'>
 			<h1 className='text-4xl font-semibold'>User Management</h1>
 			<div>
-				<button className='bg-green-700 py-2 px-4 font-semibold text-white rounded-lg shadow-lg shadow-gray-500'>
+				<button
+					onClick={() => dispatch(actionOpenModal('Create New User', <AddUser />))}
+					className='bg-green-700 py-2 px-4 font-semibold text-white rounded-lg shadow-lg shadow-gray-500'>
 					Add New User
 				</button>
 			</div>

@@ -30,6 +30,15 @@ const userService = {
 			},
 		})
 	},
+	deleteUser(userPk) {
+		return axios({
+			url: `${LINK_API}/user/delete/${userPk}`,
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+			},
+		})
+	},
 }
 
 export default userService

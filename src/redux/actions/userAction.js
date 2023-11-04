@@ -1,6 +1,7 @@
 import userService from '../../services/userService'
 import { ROLE, USER_ID } from '../../utils/constant'
 import { GET_ALL_USER, GET_MY_INFO } from '../constants/userConstant'
+import { closeLoadingAction, openLoadingAction } from './loadingAction'
 
 export function getMyInfoAction() {
 	return async (dispatch, getState) => {
@@ -19,6 +20,7 @@ export function getMyInfoAction() {
 
 export function getAllUserAction() {
 	return async (dispatch, getState) => {
+		dispatch(openLoadingAction())
 		try {
 			const { status, data } = await userService.getAllUser()
 			if (status === 200) {
@@ -27,6 +29,7 @@ export function getAllUserAction() {
 		} catch (error) {
 			alert(error.response?.data.message)
 		}
+		dispatch(closeLoadingAction())
 	}
 }
 
@@ -42,5 +45,21 @@ export function updateUserAction(payload, userPk) {
 		} catch (error) {
 			alert(error.response?.data.message)
 		}
+	}
+}
+
+export function deleteUserAction(userPk) {
+	return async (dispatch, getState) => {
+		dispatch(openLoadingAction())
+		try {
+			const { status, data } = await userService.deleteUser(userPk)
+			if (status === 200) {
+				await dispatch(getAllUserAction())
+				alert('User Delete Successfully')
+			}
+		} catch (error) {
+			alert(error.response?.data.message)
+		}
+		dispatch(closeLoadingAction())
 	}
 }
