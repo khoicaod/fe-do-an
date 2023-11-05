@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import SockJS from 'sockjs-client'
-import { DAYS_IN_MONTH, DAYS_OF_WEEK, HOURS_IN_DAY, LINK_API, MONTHS_IN_YEAR } from '../utils/constant'
+import { DAYS_IN_MONTH, DAYS_OF_WEEK, HOURS_IN_DAY, LINK_API, MONTHS_IN_YEAR, formatTime } from '../utils/constant'
 import { over } from 'stompjs'
 import { FaFireFlameCurved, FaGaugeSimpleHigh, FaTemperatureHalf } from 'react-icons/fa6'
 import { MdOutlineElectricalServices } from 'react-icons/md'
@@ -37,6 +37,36 @@ const options = {
 	plugins: {
 		legend: {
 			position: 'top',
+		},
+	},
+	scales: {
+		y: {
+			type: 'linear',
+			display: true,
+			position: 'left',
+			title: {
+				display: true,
+				align: 'end',
+				text: 'kW/h',
+				color: 'rgb(142, 68, 199)',
+				font: {
+					size: 20,
+				},
+			},
+		},
+		y1: {
+			type: 'linear',
+			display: true,
+			position: 'right',
+			title: {
+				display: true,
+				align: 'end',
+				text: 'm3',
+				color: 'rgb(55, 217, 98)',
+				font: {
+					size: 20,
+				},
+			},
 		},
 	},
 }
@@ -85,7 +115,7 @@ const RoomInfo = () => {
 
 	function powerAndWaterConsumptionData(labels) {
 		return {
-			labels,
+			labels: labels.map((label) => formatTime(activeTab, label)),
 			datasets: [
 				{
 					label: 'Power Consumption',
@@ -95,6 +125,7 @@ const RoomInfo = () => {
 					}),
 					borderColor: 'rgb(255, 99, 132)',
 					backgroundColor: 'rgba(142, 68, 199, 0.5)',
+					yAxisID: 'y',
 				},
 				{
 					label: 'Water Consumption',
@@ -104,6 +135,7 @@ const RoomInfo = () => {
 					}),
 					borderColor: 'rgb(255, 99, 132)',
 					backgroundColor: 'rgba(55, 217, 98, 0.5)',
+					yAxisID: 'y1',
 				},
 			],
 		}
