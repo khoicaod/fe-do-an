@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/fe-do-an/static/css/main.d8f22a48.css",
-    "main.js": "/fe-do-an/static/js/main.f945a792.js",
-    "index.html": "/fe-do-an/index.html",
-    "main.d8f22a48.css.map": "/fe-do-an/static/css/main.d8f22a48.css.map",
-    "main.f945a792.js.map": "/fe-do-an/static/js/main.f945a792.js.map"
+    "main.css": "/management-ui/static/css/main.d8f22a48.css",
+    "main.js": "/management-ui/static/js/main.f945a792.js",
+    "index.html": "/management-ui/index.html",
+    "main.d8f22a48.css.map": "/management-ui/static/css/main.d8f22a48.css.map",
+    "main.f945a792.js.map": "/management-ui/static/js/main.f945a792.js.map"
   },
   "entrypoints": [
     "static/css/main.d8f22a48.css",
